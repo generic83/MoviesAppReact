@@ -3,6 +3,7 @@ import classes from "./MoviesList.module.css";
 import { Movie } from "./Movie";
 import { capitalizeFirstLetter } from "../../utilities/text/capitalize";
 import { useHistory } from "react-router";
+import { createEnumDeclaration } from "typescript";
 
 const columns = ["title", "language", "location", "imdbRating"];
 
@@ -61,7 +62,7 @@ const MoviesList: React.FC<{
                 <td>{movie.language}</td>
                 <td>{movie.location}</td>
                 <td>{movie.imdbRating}</td>
-                <td>
+                <td style={{ textAlign: "center" }}>
                   <img
                     src={movie.poster}
                     alt={movie.title}
