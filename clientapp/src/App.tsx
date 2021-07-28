@@ -1,17 +1,28 @@
 import React from "react";
-import Header from "./components/layout/Header";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
-import Container from "./components/layout/Container";
-import Movies from "./components/movies/Movies";
+import MoviesPage from "./pages/MoviesPage";
+import Layout from "./components/layout/Layout";
+import MovieDetailsPage from "./pages/MovieDetailsPage";
 
 function App() {
   return (
-    <React.Fragment>
-      <Header />
-      <Container>
-        <Movies />
-      </Container>
-    </React.Fragment>
+    <Layout>
+      <Switch>
+        <Route path="/" exact>
+          <MoviesPage />
+        </Route>
+        <Route path="/movies" exact>
+          <MoviesPage />
+        </Route>
+        <Route path="/movies/:id">
+          <MovieDetailsPage />
+        </Route>
+        <Route path="*">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
+    </Layout>
   );
 }
 

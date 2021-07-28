@@ -1,17 +1,18 @@
 .grid table {
-  border: 2px solid #7b0cbb;
-  border-radius: 3px;
   background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 th {
-  background-color: #7b0cbb;
-  color: rgba(255, 255, 255, 0.66);
+  color: rgba(112, 109, 109, 0.479);
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+tr {
+  cursor: pointer;
 }
 
 td {
@@ -25,7 +26,7 @@ td {
 }
 
 th.active {
-  color: #fff;
+  color: rgb(0, 0, 0);
 }
 
 th.active .arrow {
@@ -44,11 +45,11 @@ th.active .arrow {
 .arrow.asc {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
+  border-bottom: 4px solid rgb(0, 0, 0);
 }
 
 .arrow.dsc {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
+  border-top: 4px solid rgb(0, 0, 0);
 }

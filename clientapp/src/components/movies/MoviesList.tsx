@@ -2,6 +2,8 @@ import React, { MouseEvent } from "react";
 import classes from "./MoviesList.module.css";
 import { Movie } from "./Movie";
 import { capitalizeFirstLetter } from "../../utilities/text/capitalize";
+import { useHistory } from "react-router";
+
 const columns = ["title", "language", "location", "imdbRating"];
 
 const MoviesList: React.FC<{
@@ -13,6 +15,16 @@ const MoviesList: React.FC<{
   sortKey: string;
   sortOrder: number;
 }> = ({ movies, onSortColumn, sortKey, sortOrder }) => {
+  const history = useHistory();
+
+  const onRowClickHandler = (
+    event: MouseEvent<HTMLTableRowElement>,
+    id: number
+  ) => {
+    event.preventDefault();
+    history.replace(`/movies/${id}`);
+  };
+
   return (
     <div className={classes.grid}>
       <table>
@@ -39,11 +51,23 @@ const MoviesList: React.FC<{
         <tbody>
           {movies.map((movie) => {
             return (
-              <tr key={movie.id}>
+              <tr
+                key={movie.id}
+                onClick={(e) => {
+                  onRowClickHandler(e, movie.id);
+                }}
+              >
                 <td>{movie.title}</td>
                 <td>{movie.language}</td>
                 <td>{movie.location}</td>
                 <td>{movie.imdbRating}</td>
+                <td>
+                  <img
+                    src={movie.poster}
+                    alt={movie.title}
+                    style={{ width: 80 }}
+                  ></img>
+                </td>
               </tr>
             );
           })}

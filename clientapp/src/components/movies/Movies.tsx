@@ -46,8 +46,6 @@ const Movies = () => {
       url: "http://localhost:41295/api/movies/getall",
     };
     sendRequest(requestConfig, applyData);
-
-    return () => clearTimeout(timeout);
   }, [sendRequest]);
 
   const onSortColumnHandler = (

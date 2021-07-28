@@ -11,7 +11,7 @@ const MovieSearchInput: React.FC<{ onTextEntered: (val: string) => void }> = ({
 
   return (
     <div className={classes.input}>
-      <label htmlFor="searchText">Enter search text: </label>
+      <label htmlFor="searchText">Search title: </label>
       <input type="text" id="searchText" onChange={onChangeHandler} />
     </div>
   );
