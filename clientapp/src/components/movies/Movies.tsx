@@ -8,32 +8,35 @@ import HttpRequestConfig from "../../hooks/HttpRequestConfig";
 const defaultSortColumn = "title";
 const ascOrder = 1;
 const descOrder = -1;
+let timeout: NodeJS.Timeout;
+let cachedMovies: Movie[];
 
 const Movies = () => {
   const [moviesData, setMoviesData] = useState<Movie[]>([]);
-  const [filteredMoviesData, setFilteredMovies] = useState<Movie[]>([]);
   const [sortKey, setSortKey] = useState<string>("");
   const [sortOrder, setSortOrder] = useState(ascOrder);
   const { isLoading, sendRequest, hasHttpError } = useHttp();
 
   const textEnteredHandler = (filterText: string) => {
-    if (filterText) {
-      const copy = moviesData.slice();
-      const filteredMovies = copy.filter(
-        (movie) => movie.title.indexOf(filterText) !== -1
-      );
-      setFilteredMovies(filteredMovies);
-    } else {
-      setFilteredMovies(moviesData);
+    if (timeout) {
+      clearTimeout(timeout);
     }
+
+    timeout = setTimeout(() => {
+      const filteredMovies = cachedMovies.filter(
+        (movie) =>
+          movie.title.toLowerCase().indexOf(filterText.toLowerCase()) !== -1
+      );
+      setMoviesData(filteredMovies);
+    }, 500);
   };
 
   const applyData = (data: Movie[]) => {
     data.sort((a: Movie, b: Movie) => {
       return a[defaultSortColumn] < b[defaultSortColumn] ? -1 : 1;
     });
+    cachedMovies = data.slice();
     setMoviesData(data);
-    setFilteredMovies(data);
     setSortKey(defaultSortColumn);
     setSortOrder(descOrder);
   };
@@ -43,6 +46,8 @@ const Movies = () => {
       url: "http://localhost:41295/api/movies/getall",
     };
     sendRequest(requestConfig, applyData);
+
+    return () => clearTimeout(timeout);
   }, [sendRequest]);
 
   const onSortColumnHandler = (
@@ -51,22 +56,22 @@ const Movies = () => {
   ) => {
     event.preventDefault();
     setSortKey(sortKey);
-    const copy = filteredMoviesData.slice();
-    copy.sort((a: Movie, b: Movie) => {
+    const sortedData = moviesData.slice();
+    sortedData.sort((a: Movie, b: Movie) => {
       return (a[sortKey] < b[sortKey] ? -1 : 1) * sortOrder;
     });
     setSortOrder(sortOrder * -1);
-    setFilteredMovies(copy);
+    setMoviesData(sortedData);
   };
 
   return (
     <React.Fragment>
-      <MovieSearchInput onTextEntered={textEnteredHandler} />
+      {<MovieSearchInput onTextEntered={textEnteredHandler} />}
       {isLoading && <p>Loading...</p>}
       {hasHttpError && !isLoading && <p>Something went wrong!</p>}
       {!hasHttpError && !isLoading && (
         <MoviesList
-          movies={filteredMoviesData}
+          movies={moviesData}
           sortKey={sortKey}
           sortOrder={sortOrder}
           onSortColumn={onSortColumnHandler}
