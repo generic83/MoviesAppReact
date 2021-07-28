@@ -1,12 +1,8 @@
 import React, { MouseEvent } from "react";
 import classes from "./MoviesList.module.css";
 import { Movie } from "./Movie";
-
+import { capitalizeFirstLetter } from "../../utilities/text/capitalize";
 const columns = ["title", "language", "location", "imdbRating"];
-
-const capitalize = (value: string): string => {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-};
 
 const MoviesList: React.FC<{
   movies: Movie[];
@@ -29,7 +25,7 @@ const MoviesList: React.FC<{
                   onClick={(e) => onSortColumn(e, column)}
                   className={sortKey === column ? classes.active : ""}
                 >
-                  {capitalize(column)}
+                  {capitalizeFirstLetter(column)}
                   <span
                     className={`${classes.arrow} ${
                       sortOrder === 1 ? classes.dsc : classes.asc
