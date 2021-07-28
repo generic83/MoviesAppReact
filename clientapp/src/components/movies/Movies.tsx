@@ -51,12 +51,12 @@ const Movies = () => {
   ) => {
     event.preventDefault();
     setSortKey(sortKey);
-    const copy = moviesData.slice();
+    const copy = filteredMoviesData.slice();
     copy.sort((a: Movie, b: Movie) => {
       return (a[sortKey] < b[sortKey] ? -1 : 1) * sortOrder;
     });
     setSortOrder(sortOrder * -1);
-    setMoviesData(copy);
+    setFilteredMovies(copy);
   };
 
   return (
