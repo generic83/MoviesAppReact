@@ -1,0 +1,10 @@
+.input {
+  margin-bottom: 1rem;
+}
+.input input {
+  margin-left: 0.5rem;
+}
+
+.input label {
+  font-weight: bold;
+}
