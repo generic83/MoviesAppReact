@@ -5,7 +5,6 @@ const Layout: React.FC = ({ children }) => {
   return (
     <Fragment>
       <Header />
-      {console.log(children)}
       <main>{children}</main>
     </Fragment>
   );

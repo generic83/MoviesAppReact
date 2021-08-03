@@ -3,7 +3,6 @@ import classes from "./MoviesList.module.css";
 import { Movie } from "./Movie";
 import { capitalizeFirstLetter } from "../../utilities/text/capitalize";
 import { useHistory } from "react-router";
-import { createEnumDeclaration } from "typescript";
 
 const columns = ["title", "language", "location", "imdbRating"];
 

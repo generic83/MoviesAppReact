@@ -7,6 +7,7 @@ const MoviesPage = () => {
     <React.Fragment>
       <Container>
         <Movies />
+        {console.log("dsfsfsd")}
       </Container>
     </React.Fragment>
   );

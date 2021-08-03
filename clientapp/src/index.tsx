@@ -4,13 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AuthContextProvider } from "./store/auth-context";
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>  // this cause component function to run twice in dev mode
+  <AuthContextProvider>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
+  </AuthContextProvider>,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 
