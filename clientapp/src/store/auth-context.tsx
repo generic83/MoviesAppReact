@@ -6,20 +6,19 @@ import {
   WebStorageStateStore,
 } from "oidc-client";
 
-const AuthContext = React.createContext<{
+export interface AuthContextProps {
   login: () => void;
   logout: () => void;
   loginCallback: () => void;
   isAuthenticated: User | null;
   querySessionStatus: () => void;
-  // signinSilentCallback: () => void;
-}>({
+}
+const AuthContext = React.createContext<AuthContextProps>({
   login: () => {},
   logout: () => {},
   loginCallback: () => {},
   isAuthenticated: null,
   querySessionStatus: () => {},
-  //  signinSilentCallback: () => {},
 });
 
 //Implict flow settings
@@ -157,13 +156,7 @@ export const AuthContextProvider: React.FC<{}> = ({ children }) => {
       }
     );
   };
-  const providerValue: {
-    login: () => void;
-    logout: () => void;
-    loginCallback: () => void;
-    isAuthenticated: User | null;
-    querySessionStatus: () => void;
-  } = {
+  const providerValue: AuthContextProps = {
     login: login,
     logout: logout,
     loginCallback: loginCallback,
