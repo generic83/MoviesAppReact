@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, useLocation } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { useContext } from "react";
 import "./App.css";
 import MoviesPage from "./pages/MoviesPage";
@@ -11,7 +11,6 @@ import ProfilePage from "./pages/ProfilePage";
 import WeatherPage from "./pages/WeatherPage";
 
 function App() {
-  const location = useLocation();
   const ctx = useContext(AuthContext);
   return (
     <Layout>
@@ -31,7 +30,11 @@ function App() {
         <Route path="/movies/:id">
           <MovieDetailsPage />
         </Route>
-        <Route path="/callback.html">{() => ctx.loginCallback(location)}</Route>
+        <Route path={["/callback.html", "/silent-redirect.html"]}>
+          {() => {
+            ctx.loginCallback();
+          }}
+        </Route>
         <Route path="*">
           <Redirect to="/" />
         </Route>

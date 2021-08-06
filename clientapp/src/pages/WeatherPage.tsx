@@ -1,11 +1,11 @@
 import React from "react";
-import WeatherList from "../components/weather/WeatherList";
 import Container from "../components/layout/Container";
+import Weather from "../components/weather/Weather";
 
 const WeatherPage = () => {
   return (
     <Container>
-      <WeatherList />
+      <Weather />
     </Container>
   );
 };
