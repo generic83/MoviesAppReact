@@ -9,14 +9,16 @@ import {
 export interface AuthContextProps {
   login: () => void;
   logout: () => void;
-  loginCallback: () => void;
+  signinCallback: (user: User | null) => void;
   isAuthenticated: User | null;
   querySessionStatus: () => void;
+  userManager: UserManager | null;
 }
 const AuthContext = React.createContext<AuthContextProps>({
+  userManager: null,
   login: () => {},
   logout: () => {},
-  loginCallback: () => {},
+  signinCallback: (user: User | null) => {},
   isAuthenticated: null,
   querySessionStatus: () => {},
 });
@@ -64,15 +66,16 @@ const IDENTITY_CONFIG: ExtendedUserManagerSetting = {
   //This is one way to renew tokens silently when they expire.
   //However, it requires changing SecurityHeaderAttribute in IdentityServer to allow iframe, frame-ancestors 'self' http://localhost:3000
   silent_redirect_uri: "http://localhost:3000/silent-redirect.html",
-
+  response_mode: "query",
   //set this to true to monitor anonymous session, so addUserSignedIn is triggered
+  //This also somehow causes silent_redirect_uri or redirect_url on page load(Place debugger in Route)
   monitorAnonymousSession: true,
 
   //https://github.com/IdentityModel/oidc-client-js/issues/330
   //JWTs are not revocable. Tokens are revoked when they are stored in the token service (presumably in some DB).
   //revokeAccessTokenOnSignout: true,
 
-  validateSubOnSilentRenew: true,
+  //validateSubOnSilentRenew: true,
   //silentRequestTimeout: 10000,
   //filterProtocolClaims: true,
 };
@@ -105,7 +108,7 @@ const querySessionStatus = () => {
 const login = async () => {
   userManager.signinRedirect({
     state: { path: window.location.pathname },
-    useReplaceToNaviage: true,
+    useReplaceToNavigate: true,
   });
 };
 
@@ -113,9 +116,15 @@ export const AuthContextProvider: React.FC<{}> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    const setUserIfExists = async () => {
+      const usr = await getUser();
+      setUser(usr);
+    };
+    setUserIfExists();
+
     userManager.events.addUserSignedOut(function () {
       setUser(null);
-      window.location.pathname = "./";
+      window.location.href = "./";
     });
 
     userManager.events.addUserSignedIn(function () {
@@ -124,44 +133,24 @@ export const AuthContextProvider: React.FC<{}> = ({ children }) => {
       });
     });
 
-    userManager.events.addAccessTokenExpiring(() => {
+    userManager.events.addAccessTokenExpired(() => {
       userManager.signinSilent().then((user) => {
         setUser(user);
       });
     });
-
-    const setUserIfExists = async () => {
-      const usr = await getUser();
-      setUser(usr);
-    };
-    setUserIfExists();
   }, []);
 
-  const loginCallback = () => {
-    userManager.signinCallback().then(
-      (user) => {
-        window.history.replaceState(
-          {},
-          window.document.title,
-          window.location.origin + user.state.path
-        );
-        window.location.pathname = user.state.path;
-        if (window.location.pathname === "/silent-redirect.html") {
-          return;
-        }
-        setUser(user);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  const signinCallback = (user: User | null) => {
+    setUser(user);
   };
+
   const providerValue: AuthContextProps = {
     login: login,
     logout: logout,
-    loginCallback: loginCallback,
+    signinCallback: signinCallback,
     isAuthenticated: user,
     querySessionStatus: querySessionStatus,
+    userManager: userManager,
   };
 
   return (

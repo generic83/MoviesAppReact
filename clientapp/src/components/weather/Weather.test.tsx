@@ -25,4 +25,11 @@ describe("Weather component", () => {
     const element = screen.getByText(/This is a message with/i);
     expect(element).toBeInTheDocument();
   });
+
+  test("test snapshot", () => {
+    const { container, getByText } = render(<Weather />);
+    //more about snapshots here
+    expect(getByText(/Default message/i)).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
+  });
 });

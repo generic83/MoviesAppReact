@@ -5,7 +5,7 @@ import Container from "../components/layout/Container";
 
 const ProfilePage = () => {
   const ctx = useContext(AuthContext);
-  const user: User | null = ctx.isAuthenticated;
+  const user: User | null | undefined = ctx.isAuthenticated;
   return (
     <Container>
       <h2>Name: {user?.profile.name}</h2>

@@ -1,6 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/auth-context";
 import classes from "./WeatherList.module.css";
+import WeatherListItem from "./WeatherListItem";
+import { WeatherItem } from "./WeatherItem";
 
 const WeatherList: React.FC = () => {
   const [weatherData, setWeatherData] = useState<any>([]);
@@ -18,6 +20,7 @@ const WeatherList: React.FC = () => {
           return response.json();
         })
         .then((data) => {
+          console.log(data);
           setWeatherData(data);
         });
     }
@@ -31,16 +34,9 @@ const WeatherList: React.FC = () => {
     <div className={classes.grid}>
       <table>
         <tbody>
-          {weatherData.map((item: any) => {
-            return (
-              <tr key={Math.random()}>
-                <td>{item.date}</td>
-                <td>{item.summary}</td>
-                <td>{item.temperatureF}</td>
-                <td>{item.temperatureC}</td>
-              </tr>
-            );
-          })}
+          {weatherData.map((item: WeatherItem) => (
+            <WeatherListItem key={Math.random()} weatherItem={item} />
+          ))}
         </tbody>
       </table>
       <button onClick={getData}>Refresh</button>

@@ -18,7 +18,7 @@ describe("async component", () => {
     //How to Properly Mock Typed Variables in Unit Tests with TypeScript
     //https://dev.to/zhiyueyi/how-to-properly-mock-typed-variables-in-unit-tests-with-typescript-116b
     const authContextValue = {
-      isAuthenticated: {} as User,
+      isAuthenticated: { access_token: "token" } as User,
     } as AuthContextProps;
 
     render(
@@ -32,5 +32,15 @@ describe("async component", () => {
     //find methods return promise so they can await async call in case of async api call
     const tableDataRows = await screen.findAllByRole("cell");
     expect(tableDataRows).toHaveLength(4);
+
+    const fetchCalledWith = {
+      headers: {
+        Authorization: "Bearer token",
+      },
+    };
+    expect(window.fetch).toHaveBeenCalledWith(
+      "https://localhost:5445/WeatherForecast",
+      fetchCalledWith
+    );
   });
 });

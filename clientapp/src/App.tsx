@@ -5,13 +5,13 @@ import "./App.css";
 import MoviesPage from "./pages/MoviesPage";
 import Layout from "./components/layout/Layout";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
-import AuthContext from "./store/auth-context";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import WeatherPage from "./pages/WeatherPage";
+import SigninCallback from "./pages/SigninCallback";
+import SilentSigninCallback from "./pages/SilentSigninCallback";
 
 function App() {
-  const ctx = useContext(AuthContext);
   return (
     <Layout>
       <Switch>
@@ -30,10 +30,11 @@ function App() {
         <Route path="/movies/:id">
           <MovieDetailsPage />
         </Route>
-        <Route path={["/callback.html", "/silent-redirect.html"]}>
-          {() => {
-            ctx.loginCallback();
-          }}
+        <Route path={"/callback.html"}>
+          <SigninCallback />
+        </Route>
+        <Route path={"/silent-redirect.html"}>
+          <SilentSigninCallback />
         </Route>
         <Route path="*">
           <Redirect to="/" />
